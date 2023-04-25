@@ -27,26 +27,21 @@ print('AppEngine Version: ' .. Engine.getVersion())
 local DELAY = 1000 -- ms between visualization steps for demonstration purpose
 
 -- Creating viewer
-local viewer = View.create("viewer2D1")
+local viewer = View.create()
 
 -- Setting up graphical overlay attributes
 local regionDecoration = View.ShapeDecoration.create()
-regionDecoration:setLineColor(230, 230, 0) -- Yellow
-regionDecoration:setLineWidth(4)
+regionDecoration:setLineWidth(4):setLineColor(230, 230, 0) -- Yellow
 
 local featureDecoration = View.ShapeDecoration.create()
-featureDecoration:setLineColor(75, 75, 255) -- Blue
-featureDecoration:setLineWidth(4)
+featureDecoration:setLineWidth(4):setLineColor(75, 75, 255) -- Blue
 
 local pointDecoration = View.ShapeDecoration.create()
-pointDecoration:setLineColor(230, 0, 0) -- Red
-pointDecoration:setLineWidth(4)
-pointDecoration:setPointType('CROSS')
-pointDecoration:setPointSize(10)
+pointDecoration:setLineWidth(4):setLineColor(230, 0, 0) -- Red
+pointDecoration:setPointType('CROSS'):setPointSize(10)
 
 local textDecoration = View.TextDecoration.create()
-textDecoration:setPosition(20, 30)
-textDecoration:setSize(30)
+textDecoration:setSize(30):setPosition(20, 30)
 
 --End of Global Scope-----------------------------------------------------------
 
@@ -74,13 +69,11 @@ local function main()
     local edgeSegm, _ = fitter:fitLine(img, edgeRect:toPixelRegion(img), angle)
     local points = fitter:getEdgePoints()
     viewer:clear()
-    local imageID = viewer:addImage(img)
-    for _, point in ipairs(points) do
-      viewer:addShape(point, pointDecoration, nil, imageID)
-    end
-    viewer:addShape(edgeSegm, featureDecoration, nil, imageID)
-    viewer:addShape(edgeRect, regionDecoration, nil, imageID)
-    viewer:addText('Probe count: ' .. i, textDecoration, nil, imageID)
+    viewer:addImage(img)
+    viewer:addShape(points, pointDecoration)
+    viewer:addShape(edgeSegm, featureDecoration)
+    viewer:addShape(edgeRect, regionDecoration)
+    viewer:addText('Probe count: ' .. i, textDecoration)
     viewer:present()
     Script.sleep(DELAY) -- for demonstration purpose only
   end
